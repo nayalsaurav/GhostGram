@@ -1,10 +1,9 @@
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-import { UserCard } from "@/components/UserCard";
-import { CardStack } from "@/components/StackCard";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import { AnimatedListEffect } from "@/components/AnimatedListEffect";
 export default function Home() {
   return (
-    <section className="w-full mx-auto mt-20">
+    <section className="w-full mx-auto my-20 z-99">
       <div className=" p-4  mx-auto relative z-10  w-full pt-20 md:pt-0">
         <h1 className="scroll-m-20 text-center text-4xl md:text-7xl font-bold tracking-tight text-balance">
           Step Into the World of Anonymous Messaging
@@ -153,13 +152,11 @@ export default function Home() {
         ]}
       />
 
-      <h2 className="scroll-m-20 mt-7 border-b pb-2 text-3xl font-bold tracking-tight first:mt-0 text-center">
+      <h2 className="my-10 text-3xl font-bold tracking-tight first:mt-0 text-center">
         Receive Instant Messages
       </h2>
 
-      <div className="h-[60vh] overflow-hidden mb-10">
-        <CardStack />
-      </div>
+      <AnimatedListEffect />
     </section>
   );
 }
