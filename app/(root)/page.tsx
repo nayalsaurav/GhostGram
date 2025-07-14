@@ -1,4 +1,3 @@
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { AnimatedListEffect } from "@/components/AnimatedListEffect";
 import { GetStartedButton } from "@/components/GetStartedButton";
