@@ -1,15 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { isAcceptingMessagesAction } from "@/app/actions/isAcceptingMessages";
 import { toast } from "sonner";
 interface AcceptMessagesProps {
   username: string;
+  isAccepting: boolean;
 }
 
-export const AcceptMessages = ({ username }: AcceptMessagesProps) => {
-  const [checked, setChecked] = useState(true);
+export const AcceptMessages = ({
+  username,
+  isAccepting,
+}: AcceptMessagesProps) => {
+  const [checked, setChecked] = useState(isAccepting);
   const [loading, setLoading] = useState(false);
   const handleChange = async (newValue: boolean) => {
     console.log("called: ", newValue);
@@ -35,6 +39,8 @@ export const AcceptMessages = ({ username }: AcceptMessagesProps) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {}, []);
 
   return (
     <div className="flex items-center gap-3 justify-start my-3">

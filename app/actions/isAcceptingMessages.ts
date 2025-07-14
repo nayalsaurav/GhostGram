@@ -28,7 +28,7 @@ export async function isAcceptingMessagesAction({
 
     return {
       status: "success",
-      message: `Updated isAccepting to ${checked}`,
+      message: `Message acceptance status is updated successfully`,
     };
   } catch (error) {
     console.error("Error updating user:", error);
