@@ -23,13 +23,13 @@ export default function SignUpForm() {
     if (response.status === "success") {
       toast(response.message);
 
-      const email = formData.get("email") as string;
+      const username = formData.get("username") as string;
       const password = formData.get("password") as string;
-
+      console.log(username);
       await signIn("credentials", {
         redirect: true,
         callbackUrl: "/dashboard",
-        email,
+        username,
         password,
       });
     } else {
@@ -50,7 +50,15 @@ export default function SignUpForm() {
       <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
         GhostGram is live. Signup and leave your (invisible) mark.
       </p>
-
+      <p className="mt-4 text-sm text-neutral-600 dark:text-neutral-300">
+        Already have an account?{" "}
+        <Link
+          href="/signin"
+          className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+        >
+          Sign in
+        </Link>
+      </p>
       <form className="my-8" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="username">Username</Label>

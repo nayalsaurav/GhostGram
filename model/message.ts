@@ -1,8 +1,8 @@
 import { Schema, model, models, Types } from "mongoose";
 
 export interface IMessage {
-  _id: Types.ObjectId;
-  receiverId: Types.ObjectId;
+  _id: Types.ObjectId | string;
+  receiverId: Types.ObjectId | string;
   message: string;
   createdAt?: Date;
   updatedAt?: Date;

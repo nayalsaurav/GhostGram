@@ -1,6 +1,7 @@
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { AnimatedListEffect } from "@/components/AnimatedListEffect";
+import { GetStartedButton } from "@/components/GetStartedButton";
 export default function Home() {
   return (
     <section className="w-full mx-auto my-20 z-99">
@@ -12,15 +13,7 @@ export default function Home() {
         <p className="mt-7 text-muted-foreground text-xl max-w-lg text-center mx-auto">
           GhostGram - Hide Your Name, Not Your Thoughts.
         </p>
-        <div className="m-6 flex justify-center text-center">
-          <HoverBorderGradient
-            containerClassName="rounded-full"
-            as="button"
-            className="bg-black dark:bg-white text-white dark:text-black flex items-center space-x-2  cursor-pointer"
-          >
-            <span>Get Started</span>
-          </HoverBorderGradient>
-        </div>
+        <GetStartedButton />
       </div>
       <InfiniteMovingCards
         items={[

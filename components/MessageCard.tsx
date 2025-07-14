@@ -4,11 +4,12 @@ import { Card, CardHeader, CardTitle } from "./ui/card";
 import { deleteMessageAction } from "@/app/actions/deleteMessage";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import { MessageType } from "@/app/actions/getAllMessages";
 interface MessageCardProps {
   id: string;
   message: string;
   time: string;
-  setData: React.Dispatch<React.SetStateAction<any[]>>;
+  setData: React.Dispatch<React.SetStateAction<MessageType[]>>;
 }
 
 export const MessageCard = ({

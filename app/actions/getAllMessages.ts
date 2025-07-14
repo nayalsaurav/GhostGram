@@ -4,6 +4,12 @@ import { authOptions } from "@/lib/auth";
 import Message from "@/model/message";
 import { getServerSession } from "next-auth";
 
+export type MessageType = {
+  _id: string;
+  message: string;
+  createdAt: string;
+};
+
 export const getAllMessageAction = async () => {
   const session = await getServerSession(authOptions);
 
@@ -24,10 +30,10 @@ export const getAllMessageAction = async () => {
       .sort({ createdAt: -1 })
       .lean();
 
-    const safeMessages = messages.map((msg) => ({
-      ...msg,
+    const safeMessages: MessageType[] = messages.map((msg) => ({
       _id: String(msg._id),
-      createdAt: msg.createdAt?.toLocaleString() ?? null,
+      message: msg.message,
+      createdAt: msg.createdAt?.toLocaleString() ?? "",
     }));
 
     return {

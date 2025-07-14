@@ -22,11 +22,11 @@ export const metadata: Metadata = {
     title: "GhostGram",
     description:
       "Step into the world of anonymous messaging with GhostGram. Speak freely, stay private.",
-    url: "https://ghostgram.app", // change to your real domain
+    url: process.env.BASE_URL,
     siteName: "GhostGram",
     images: [
       {
-        url: "/og-image.png", // add this image to your public folder
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "GhostGram - Anonymous Messaging",

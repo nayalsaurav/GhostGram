@@ -6,11 +6,12 @@ import { cn } from "@/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { Loader2Icon } from "lucide-react";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function SignInForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,6 +37,15 @@ export default function SignInForm() {
       </h2>
       <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
         GhostGram is live. Log in and leave your (invisible) mark.
+      </p>
+      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+        Don’t have an account?{" "}
+        <Link
+          href="/signup"
+          className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+        >
+          Sign up
+        </Link>
       </p>
 
       <form className="my-8" onSubmit={handleSubmit}>

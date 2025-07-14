@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardHeader, CardContent } from "./ui/card";
+import { CardHeader, CardContent } from "./ui/card";
 import { GradientAvatar } from "./Avatar";
 interface UserCardProps {
   handle: string;

@@ -34,6 +34,7 @@ export const MessageForm = ({
         toast.error(response.message);
       }
     } catch (err) {
+      console.error(err);
       toast.error("Something went wrong.");
     } finally {
       setLoading(false);

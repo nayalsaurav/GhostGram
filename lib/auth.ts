@@ -31,7 +31,6 @@ export const authOptions: NextAuthOptions = {
 
         const user = await User.findOne({
           username: credentials.username,
-          provider: "credentials",
         });
         if (!user) {
           throw new Error("No user found with the given username.");
@@ -71,7 +70,7 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               username,
               isAccepting: true,
-              password: crypto.randomUUID(),
+              password: await bcrypt.hash(crypto.randomUUID(), 10),
             });
           }
 

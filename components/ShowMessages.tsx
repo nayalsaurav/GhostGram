@@ -5,11 +5,11 @@ import { Button } from "./ui/button";
 import { RefreshCcw } from "lucide-react";
 import { MessageCard } from "./MessageCard";
 import MessageCardSkeleton from "./MessageCardSkeleton";
-import { getAllMessageAction } from "@/app/actions/getAllMessages";
+import { getAllMessageAction, MessageType } from "@/app/actions/getAllMessages";
 import { toast } from "sonner";
 
 export const ShowMessages = () => {
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<MessageType[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   const fetchMessages = async () => {
