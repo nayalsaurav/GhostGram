@@ -16,13 +16,29 @@ export default function SignUpForm() {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
+
     const response = await signupAction(formData);
     setLoading(false);
+
     if (response.status === "success") {
       toast(response.message);
-    } else toast(response.message);
+
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      await signIn("credentials", {
+        redirect: true,
+        callbackUrl: "/dashboard",
+        email,
+        password,
+      });
+    } else {
+      toast(response.message);
+    }
+
     console.log("Form submitted");
   };
+
   return (
     <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
       <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
