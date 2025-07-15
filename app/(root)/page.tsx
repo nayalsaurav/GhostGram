@@ -6,11 +6,11 @@ export default function Home() {
     <section className="w-full mx-auto my-20 z-99">
       <div className=" p-4  mx-auto relative z-10  w-full pt-20 md:pt-0">
         <h1 className="scroll-m-20 text-center text-4xl md:text-7xl font-bold tracking-tight text-balance">
-          Step Into the World of Anonymous Messaging
+          Got Questions? Ghost Them My Way
         </h1>
 
         <p className="mt-7 text-muted-foreground text-xl max-w-lg text-center mx-auto">
-          GhostGram - Hide Your Name, Not Your Thoughts.
+          GhostGram - Share your link. Receive anonymous questions. Stay curious, stay unfiltered.
         </p>
         <GetStartedButton />
       </div>
