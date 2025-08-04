@@ -54,35 +54,32 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === "google") {
-        try {
-          await connectToDatabase();
+    async signIn({ user }) {
+      try {
+        await connectToDatabase();
 
-          let dbUser = await User.findOne({
+        let dbUser = await User.findOne({
+          email: user.email,
+        });
+
+        const username = generateFromEmail(user.email!, 4);
+
+        if (!dbUser) {
+          dbUser = await User.create({
             email: user.email,
+            username,
+            isAccepting: true,
+            password: await bcrypt.hash(crypto.randomUUID(), 10),
           });
-
-          const username = generateFromEmail(user.email!, 4);
-
-          if (!dbUser) {
-            dbUser = await User.create({
-              email: user.email,
-              username,
-              isAccepting: true,
-              password: await bcrypt.hash(crypto.randomUUID(), 10),
-            });
-          }
-
-          user.id = dbUser._id.toString();
-          user.username = dbUser.username;
-          user.isAccepting = dbUser.isAccepting;
-        } catch (err) {
-          console.error("Google Sign-In Error:", err);
-          return false;
         }
-      }
 
+        user.id = dbUser._id.toString();
+        user.username = dbUser.username;
+        user.isAccepting = dbUser.isAccepting;
+      } catch (err) {
+        console.error("Google Sign-In Error:", err);
+        return false;
+      }
       return true;
     },
 
