@@ -1,13 +1,78 @@
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { AnimatedListEffect } from "@/components/AnimatedListEffect";
 import { GetStartedButton } from "@/components/GetStartedButton";
+import { Metadata } from "next";
+
+const siteUrl = "https://ghostgram.nayalsaurav.in";
+
+export const metadata: Metadata = {
+  title: "GhostGram - Anonymous Q&A Platform for Creators",
+  description:
+    "GhostGram is where creators receive anonymous questions from their audience. Get your unique link, share it publicly, and collect honest feedback and questions.",
+  alternates: {
+    canonical: siteUrl,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${siteUrl}/#webapp`,
+      name: "GhostGram",
+      url: siteUrl,
+      description:
+        "Anonymous Q&A platform for creators. Get your unique link and receive questions from your audience.",
+      applicationCategory: "SocialNetworkingApplication",
+      operatingSystem: "Web",
+      featureList: [
+        "Unique shareable links",
+        "Anonymous question submission",
+        "Private dashboard",
+        "Toggle to pause questions",
+      ],
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
+      name: "GhostGram",
+      url: siteUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/witch.png`,
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "GhostGram",
+      description: "Anonymous Q&A Platform for Creators",
+      publisher: {
+        "@id": `${siteUrl}/#organization`,
+      },
+    },
+  ],
+};
+
 export default function Home() {
   return (
-    <section className="w-full mx-auto my-20 z-99">
-      <div className=" p-4  mx-auto relative z-10  w-full pt-20 md:pt-0">
-        <h1 className="scroll-m-20 text-center text-4xl md:text-7xl font-bold tracking-tight text-balance">
-          Got Questions? Ghost Them My Way
-        </h1>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <section className="w-full mx-auto my-20 z-99">
+        <div className=" p-4  mx-auto relative z-10  w-full pt-20 md:pt-0">
+          <h1 className="scroll-m-20 text-center text-4xl md:text-7xl font-bold tracking-tight text-balance">
+            Got Questions? Ghost Them My Way
+          </h1>
 
         <p className="mt-7 text-muted-foreground text-xl max-w-lg text-center mx-auto">
           GhostGram - Share your link. Receive anonymous questions. Stay curious, stay unfiltered.
@@ -150,5 +215,6 @@ export default function Home() {
 
       <AnimatedListEffect />
     </section>
+    </>
   );
 }

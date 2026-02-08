@@ -30,10 +30,16 @@ export const authOptions: NextAuthOptions = {
         await connectToDatabase();
 
         const user = await User.findOne({
-          username: credentials.username,
+          username: credentials.username.toLowerCase(),
         });
         if (!user) {
           throw new Error("No user found with the given username.");
+        }
+
+        if (user.authProvider === "google") {
+          throw new Error(
+            "This account was created with Google. Please sign in with Google instead."
+          );
         }
 
         const isValid = await bcrypt.compare(
@@ -46,6 +52,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: user._id.toString(),
+          email: user.email,
           username: user.username,
           isAccepting: user.isAccepting,
         };
@@ -54,22 +61,24 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
+      if (account?.provider === "credentials") {
+        return true;
+      }
+
       try {
         await connectToDatabase();
 
-        let dbUser = await User.findOne({
-          email: user.email,
-        });
-
-        const username = generateFromEmail(user.email!, 4);
+        let dbUser = await User.findOne({ email: user.email });
 
         if (!dbUser) {
+          const username = generateFromEmail(user.email!, 4);
           dbUser = await User.create({
             email: user.email,
             username,
             isAccepting: true,
             password: await bcrypt.hash(crypto.randomUUID(), 10),
+            authProvider: "google",
           });
         }
 
@@ -77,7 +86,7 @@ export const authOptions: NextAuthOptions = {
         user.username = dbUser.username;
         user.isAccepting = dbUser.isAccepting;
       } catch (err) {
-        console.error("Google Sign-In Error:", err);
+        console.error("OAuth Sign-In Error:", err);
         return false;
       }
       return true;

@@ -7,27 +7,68 @@ import { IconBrandGoogle } from "@tabler/icons-react";
 import { Loader2Icon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function SignInForm() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [googleLoading, setGoogleLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (!username.trim()) {
+      toast.error("Please enter your username");
+      return;
+    }
+
+    if (!password) {
+      toast.error("Please enter your password");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
     setLoading(true);
 
-    await signIn("credentials", {
-      redirect: true,
-      username,
-      password,
-    });
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        username: username.trim().toLowerCase(),
+        password,
+        callbackUrl: "/dashboard",
+      });
 
-    setLoading(false);
+      if (result?.error) {
+        toast.error(result.error);
+        setLoading(false);
+        return;
+      }
+
+      if (result?.ok) {
+        toast.success("Signed in successfully!");
+        // Redirect to dashboard
+        window.location.href = result.url || "/dashboard";
+      }
+    } catch {
+      toast.error("An unexpected error occurred. Please try again.");
+      setLoading(false);
+    }
   };
 
   const handleGoogleSignIn = async () => {
-    await signIn("google");
+    setGoogleLoading(true);
+    try {
+      await signIn("google", { callbackUrl: "/dashboard" });
+    } catch {
+      toast.error("Failed to sign in with Google");
+      setGoogleLoading(false);
+    }
   };
 
   return (
@@ -72,8 +113,9 @@ export default function SignInForm() {
         </LabelInputContainer>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:cursor-not-allowed disabled:opacity-50"
           type="submit"
+          disabled={loading || googleLoading}
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
@@ -92,11 +134,16 @@ export default function SignInForm() {
           <button
             type="button"
             onClick={handleGoogleSignIn}
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
+            disabled={loading || googleLoading}
+            className="group/btn shadow-input relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+            {googleLoading ? (
+              <Loader2Icon className="h-4 w-4 animate-spin text-neutral-800 dark:text-neutral-300" />
+            ) : (
+              <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+            )}
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              Google
+              {googleLoading ? "Signing in..." : "Google"}
             </span>
             <BottomGradient />
           </button>

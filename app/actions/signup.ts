@@ -40,6 +40,7 @@ export const signupAction = async (formData: FormData) => {
       username,
       email,
       password: hashedPassword,
+      authProvider: "credentials",
     });
 
     return {

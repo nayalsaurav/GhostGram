@@ -2,9 +2,9 @@ import React from "react";
 import SignInForm from "@/components/SignInForm";
 
 export const metadata = {
-  title: "Sign In – Ghostgram",
+  title: "Sign In",
   description:
-    "Access your Ghostgram account and unlock AI-powered resume analysis and mock interviews.",
+    "Sign in to your GhostGram account to receive anonymous messages and connect authentically.",
 };
 
 const Page = () => {

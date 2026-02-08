@@ -10,33 +10,88 @@ import { toast } from "sonner";
 import { Loader2Icon } from "lucide-react";
 import { Button } from "./ui/button";
 import { signIn } from "next-auth/react";
+
 export default function SignUpForm() {
   const [loading, setLoading] = React.useState(false);
+  const [googleLoading, setGoogleLoading] = React.useState(false);
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     const formData = new FormData(e.currentTarget);
 
-    const response = await signupAction(formData);
-    setLoading(false);
+    const username = formData.get("username")?.toString().trim() || "";
+    const email = formData.get("email")?.toString().trim() || "";
+    const password = formData.get("password")?.toString() || "";
 
-    if (response.status === "success") {
-      toast(response.message);
-
-      const username = formData.get("username") as string;
-      const password = formData.get("password") as string;
-      console.log(username);
-      await signIn("credentials", {
-        redirect: true,
-        callbackUrl: "/dashboard",
-        username,
-        password,
-      });
-    } else {
-      toast(response.message);
+    // Client-side validation
+    if (!username) {
+      toast.error("Please enter a username");
+      return;
     }
 
-    console.log("Form submitted");
+    if (username.length < 3) {
+      toast.error("Username must be at least 3 characters");
+      return;
+    }
+
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (!password) {
+      toast.error("Please enter a password");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await signupAction(formData);
+
+      if (response.status === "success") {
+        toast.success("Account created successfully!");
+
+        // Auto sign-in after successful signup
+        const result = await signIn("credentials", {
+          redirect: false,
+          callbackUrl: "/dashboard",
+          username: username.toLowerCase(),
+          password,
+        });
+
+        if (result?.error) {
+          toast.error("Account created but auto sign-in failed. Please sign in manually.");
+          setLoading(false);
+          return;
+        }
+
+        if (result?.ok) {
+          window.location.href = result.url || "/dashboard";
+        }
+      } else {
+        toast.error(response.message);
+        setLoading(false);
+      }
+    } catch {
+      toast.error("An unexpected error occurred. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -109,15 +164,26 @@ export default function SignUpForm() {
 
         <div className="flex flex-col space-y-4">
           <button
-            className="group/btn shadow-input relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
+            className="group/btn shadow-input relative flex h-10 w-full items-center justify-center space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626] disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
+            disabled={loading || googleLoading}
             onClick={async () => {
-              await signIn("google");
+              setGoogleLoading(true);
+              try {
+                await signIn("google", { callbackUrl: "/dashboard" });
+              } catch {
+                toast.error("Failed to sign in with Google");
+                setGoogleLoading(false);
+              }
             }}
           >
-            <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-sm text-neutral-700 dark:text-neutral-300 pb-[3px]">
-              Google
+            {googleLoading ? (
+              <Loader2Icon className="h-4 w-4 animate-spin text-neutral-800 dark:text-neutral-300" />
+            ) : (
+              <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+            )}
+            <span className="text-sm text-neutral-700 dark:text-neutral-300">
+              {googleLoading ? "Signing in..." : "Google"}
             </span>
             <BottomGradient />
           </button>

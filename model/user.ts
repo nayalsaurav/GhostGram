@@ -6,6 +6,7 @@ export interface IUser {
   email: string;
   isAccepting: boolean;
   password: string;
+  authProvider: "credentials" | "google";
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -29,6 +30,11 @@ const userSchema = new Schema<IUser>(
     isAccepting: {
       type: Boolean,
       default: true,
+    },
+    authProvider: {
+      type: String,
+      enum: ["credentials", "google"],
+      default: "credentials",
     },
   },
   {

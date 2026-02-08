@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { Providers } from "../providers";
@@ -14,22 +14,42 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://ghostgram.nayalsaurav.in";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
 export const metadata: Metadata = {
-  title: "GhostGram",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "GhostGram",
+    template: "%s | GhostGram",
+  },
   description:
-    "Step into the world of anonymous messaging with GhostGram. Speak freely, stay private.",
+    "Send and receive anonymous messages with GhostGram. Share your unique link and get honest feedback.",
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    title: "GhostGram",
+    title: "GhostGram - Anonymous Messaging Platform",
     description:
-      "Step into the world of anonymous messaging with GhostGram. Speak freely, stay private.",
-    url: process.env.BASE_URL,
+      "Send and receive anonymous messages. Share your link, get honest feedback, and stay completely private.",
+    url: siteUrl,
     siteName: "GhostGram",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "GhostGram - Anonymous Messaging",
+        alt: "GhostGram - Anonymous Messaging Platform",
       },
     ],
     type: "website",
@@ -37,7 +57,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "GhostGram",
-    description: "Step into the world of anonymous messaging with GhostGram.",
+    description: "Send and receive anonymous messages with GhostGram.",
     images: ["/og-image.png"],
   },
   icons: {
